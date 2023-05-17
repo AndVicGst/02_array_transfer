@@ -33,21 +33,26 @@ public:
     }
     Array() : Array(nullptr, 0) {} //конструктор без параметров
 
-    Array(const Array& arr) { copyArray(arr.mas, arr.size_mas); } // конструктор копирования
+    Array(const Array& arr) { 
+        cout << "Консртуктор копирования" << endl;
+        copyArray(arr.mas, arr.size_mas); } // конструктор копирования
 
     Array& operator=(Array& arr) {       //оператор копирования
+        cout << "Оператор копирования" << endl;
         if (&arr == this) return *this;  // если попробуем присвоить массив в самого себя, просто вернем массив без присваивания
         copyArray(arr.mas, arr.size_mas);
         return *this;
     }
 
     Array(Array&& arr) noexcept { //конструктор переноса
+        cout << "Консртуктор переноса" << endl;
         mas = arr.mas;
         size_mas = arr.size_mas;
         arr.size_mas = 0; // обнуляем переданный размер массива, иначе ошибка деструктора - два обьекта указывают на одну и ту же память 
     }
 
     Array& operator=(Array&& arr) noexcept { //оператор переноса
+        cout << "Оператор переноса" << endl;
         if (&arr == this) return *this; // если попробуем присвоить массив в самого себя, просто вернем массив без присваивания
         clearMemory(); //особождаем память
         mas = arr.mas;
@@ -69,7 +74,14 @@ public:
             cout << "Массив пустой" << endl << endl;
         }
     }
+
 };
+
+    Array getF() {
+    int  mas[5]{ 1,2,3,4,5 };
+    Array arr(mas, 5);
+    return arr;
+    }
 
 int main()
 {
@@ -91,15 +103,12 @@ int main()
     Array arr3 {arr1};          //создаем обьект через конструктор копирования
     arr3.printArr("arr3");
 
-    Array arr4(arr3);           //создаем обьект через конструктор переноса
+    Array arr4{ getF() };           //создаем обьект через конструктор переноса
     arr4.printArr("arr4");
 
-    Array arr5;                 //создаем обьект через оператор переноса
-    arr5 = arr4;               
+    Array arr5;                    //создаем обьект через оператор переноса
+    arr5 = getF();
     arr5.printArr("arr5");
-
-    arr1 = arr1;                //если обьект самого в себя скопировать, срабатывает проверка в конструкторе и обьект не изменяется  
-    arr1.printArr("arr1 = arr1");
 
     system("pause");
     return 0;
